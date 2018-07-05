@@ -40,7 +40,8 @@ coords_file = args.infile
 # read file	
 d=np.genfromtxt(open(coords_file, "rb"), dtype="str")
 #coords=[pstart_1 pend hstart_1 hend pAlnL hAlnL PID pL hL pID hID]
-
+if d.shape == (11,):
+	d = d.reshape(1,11)
 # unique set of haplotigs
 haplotigs=list(set(list(d[:,10])))
 # loop through haplotigs, subset array for each
