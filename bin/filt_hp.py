@@ -42,7 +42,8 @@ def dup(a,b):
 
 # open file
 hp=np.genfromtxt(open(inFile, "rb"), dtype="str")
-
+if hp.shape == (12,):
+	hp = hp.reshape(1,12)
 # list of primary contigs
 primaries=list(set(list(hp[:,5])))
 primaries.sort()
