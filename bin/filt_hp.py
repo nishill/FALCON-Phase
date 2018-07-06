@@ -75,4 +75,4 @@ else:
 	# print new file
 	for k in range(len(filtHaplotigs)):
 		if filtHaplotigs[k] == 0:
-        print('\t'.join(str(o) for o in hp[k,:]))
+			print('\t'.join(str(o) for o in hp[k,:]))
