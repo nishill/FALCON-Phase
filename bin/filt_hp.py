@@ -42,33 +42,37 @@ def dup(a,b):
 
 # open file
 hp=np.genfromtxt(open(inFile, "rb"), dtype="str")
+if hp.shape == (12,):
+	hp = hp.reshape(1,12)
+elif hp.shape == (0,):
+	pass
+else:
+	# list of primary contigs
+	primaries=list(set(list(hp[:,5])))
+	primaries.sort()
 
-# list of primary contigs
-primaries=list(set(list(hp[:,5])))
-primaries.sort()
-
-# list of booleans indicating filtered or not
-filtHaplotigs = [0] * hp.shape[0]
+	# list of booleans indicating filtered or not
+	filtHaplotigs = [0] * hp.shape[0]
 
 
-# loop through each primary and process all its haplotigs
-for p in primaries:
+	# loop through each primary and process all its haplotigs
+	for p in primaries:
 
-# list of array indices for primary contig
-    subset = []
-    for i in range(0,hp.shape[0]):
-        if hp[i,5] == p:
-            subset.append(i) # list of indices in hp for primary contig
-# pairwise comparison of each haplotig
-    for i in range(len(subset)):
-        for j in range(i):
-            if nested(hp[subset[i],:],hp[subset[j],:]):
-                filtHaplotigs[subset[i]] = 1
-            if nested(hp[subset[j],:],hp[subset[i],:]):
-                filtHaplotigs[subset[j]] = 1
-            if dup(hp[subset[i],:],hp[subset[j],:]):
-                filtHaplotigs[subset[j]] = 1 # remove j
-# print new file
-for k in range(len(filtHaplotigs)):
-    if filtHaplotigs[k] == 0:
-        print('\t'.join(str(o) for o in hp[k,:]))
+	# list of array indices for primary contig
+		subset = []
+		for i in range(0,hp.shape[0]):
+			if hp[i,5] == p:
+				subset.append(i) # list of indices in hp for primary contig
+	# pairwise comparison of each haplotig
+		for i in range(len(subset)):
+			for j in range(i):
+				if nested(hp[subset[i],:],hp[subset[j],:]):
+					filtHaplotigs[subset[i]] = 1
+				if nested(hp[subset[j],:],hp[subset[i],:]):
+					filtHaplotigs[subset[j]] = 1
+				if dup(hp[subset[i],:],hp[subset[j],:]):
+					filtHaplotigs[subset[j]] = 1 # remove j
+	# print new file
+	for k in range(len(filtHaplotigs)):
+		if filtHaplotigs[k] == 0:
+			print('\t'.join(str(o) for o in hp[k,:]))
